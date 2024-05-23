@@ -1,0 +1,53 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+        {
+            "label": "Cmake Configure",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--fresh",
+                "-B", "build",
+                "-S", ".",
+                "-DCMAKE_BUILD_TYPE=Debug"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Build Debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", ".",
+                "--config", "Debug",
+                "--target", "my_grpc_app",
+                "--verbose"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            }
+        }
+    ]
+}
