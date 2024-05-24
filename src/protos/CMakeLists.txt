@@ -1,5 +1,5 @@
 find_package(gRPC REQUIRED)
-find_package(protobuf REQUIRED)
+find_package(Protobuf REQUIRED)
 
 set(GRPC_HEADER_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
@@ -22,5 +22,5 @@ protobuf_generate(
     PLUGIN_OPTIONS generate_mock_code=true
     GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc
 )
-target_include_directories(ProtoTest PUBLIC ${protobuf_INCLUDE_DIRS} ${gRPC_INCLUDE_DIRS} ${absl_INCLUDE_DIRS})
-target_link_libraries(ProtoTest  protobuf::protobuf grpc::grpc )
+target_include_directories(ProtoTest PUBLIC ${Protobuf_INCLUDE_DIRS} ${gRPC_INCLUDE_DIRS} ${absl_INCLUDE_DIRS})
+target_link_libraries(ProtoTest)

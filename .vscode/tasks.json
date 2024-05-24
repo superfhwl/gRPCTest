@@ -9,7 +9,8 @@
                 "--fresh",
                 "-B", "build",
                 "-S", ".",
-                "-DCMAKE_BUILD_TYPE=Debug"
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_TOOLCHAIN_FILE=D:/Repo/vcpkg/scripts/buildsystems/vcpkg.cmake"
             ],
             "group": {
                 "kind": "build",
