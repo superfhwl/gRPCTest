@@ -28,8 +28,3 @@ void RunServer() {
   std::cout << "Server listening on " << server_address << std::endl;
   server->Wait();
 }
-
-int main() {
-  RunServer();
-  return 0;
-}

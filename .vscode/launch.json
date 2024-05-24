@@ -8,7 +8,7 @@
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/my_grpc_app.exe",
+            "program": "${workspaceFolder}/build/Debug/MyGrpcProject.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

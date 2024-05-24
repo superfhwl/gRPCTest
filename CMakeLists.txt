@@ -8,68 +8,30 @@ include(${CMAKE_BINARY_DIR}/../conan/conan_toolchain.cmake)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 查找 protobuf 包
-find_package(Protobuf CONFIG REQUIRED)
-find_package(gRPC CONFIG REQUIRED)
+# 包含子目录
+add_subdirectory(src)
 
-# # 定义生成 gRPC 文件的宏
-# function(grpc_generate_cpp SRCS HDRS)
-#     set(_proto_files ${ARGN})
-#     set(_generated_files "")
+find_package(gRPC REQUIRED)
+find_package(protobuf REQUIRED)
 
-#     foreach(_proto_file ${_proto_files})
-#         get_filename_component(_proto_file_abs ${_proto_file} ABSOLUTE)
-#         get_filename_component(_proto_path ${_proto_file_abs} PATH)
-#         get_filename_component(_proto_name ${_proto_file_abs} NAME_WE)
-
-#         list(APPEND _generated_files "${CMAKE_BINARY_DIR}/generated/${_proto_name}.pb.cc")
-#         list(APPEND _generated_files "${CMAKE_BINARY_DIR}/generated/${_proto_name}.pb.h")
-#         list(APPEND _generated_files "${CMAKE_BINARY_DIR}/generated/${_proto_name}.grpc.pb.cc")
-#         list(APPEND _generated_files "${CMAKE_BINARY_DIR}/generated/${_proto_name}.grpc.pb.h")
-
-#         add_custom_command(
-#             OUTPUT "${CMAKE_BINARY_DIR}/generated/${_proto_name}.pb.cc"
-#                    "${CMAKE_BINARY_DIR}/generated/${_proto_name}.pb.h"
-#                    "${CMAKE_BINARY_DIR}/generated/${_proto_name}.grpc.pb.cc"
-#                    "${CMAKE_BINARY_DIR}/generated/${_proto_name}.grpc.pb.h"
-#             COMMAND ${Protobuf_PROTOC_EXECUTABLE}
-#             ARGS --grpc_out=${CMAKE_BINARY_DIR}/generated
-#                  --cpp_out=${CMAKE_BINARY_DIR}/generated
-#                  --plugin=protoc-gen-grpc=${gRPC_PLUGIN}
-#                  -I ${_proto_path}
-#                  ${_proto_file_abs}
-#             DEPENDS ${_proto_file_abs}
-#             COMMENT "Generating ${_proto_file}"
-#             VERBATIM
-#         )
-#     endforeach()
-
-#     set(${SRCS} ${${SRCS}} ${_generated_files} PARENT_SCOPE)
-#     set(${HDRS} ${${HDRS}} ${_generated_files} PARENT_SCOPE)
-# endfunction()
-
-
-# 定义你的 .proto 文件
-set(PROTO_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/protos/message.proto")
-
-# protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILE})
-# grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_FILE})
-
-# 自动生成 protobuf 和 gRPC 源文件和头文件
-add_executable(my_grpc_app)
-protobuf_generate(
-    TARGET my_grpc_app    
-    LANGUAGE cpp
-    PROTOS ${PROTO_FILES}
-    OUT_VAR PB_OUT_FILES
-    # GENERATE_EXTENSIONS .pb.h .pb.cc .grpc.pb.h .grpc.pb.cc
-    PLUGIN "protoc-gen-grpc=$<TARGET_FILE:gRPC::grpc_cpp_plugin>"
-)
-
-# 添加执行文件
-target_sources(my_grpc_app PRIVATE src/grpc_test.cpp ${PB_OUT_FILES})
-# add_executable(my_grpc_app src/grpc_test.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-# add_executable(my_grpc_app ${PROTO_SRCS} ${PROTO_HDRS} ${GRPC_SRCS} ${GRPC_HDRS} src/grpc_test.cpp)
+find_library(PROTOBUF_LIB NAMES libprotobufd.lib PATHS "${CMAKE_SOURCE_DIR}/3rd_party/libs")
+if(NOT PROTOBUF_LIB)
+    message(FATAL_ERROR "libprotobufd.lib not found")
+endif()
 
 # 链接 protobuf 和 gRPC 库
-target_link_libraries(my_grpc_app gRPC::grpc++ gRPC::grpc++_reflection protobuf::libprotobuf)
+add_executable(MyGrpcProject main.cpp)
+
+set_target_properties(MyGrpcProject PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
+message(STATUS "Protobuf libraries: " ${protobuf_LIBRARIES})
+message(STATUS "gRPC libraries: " ${gRPC_LIBRARIES})
+message(STATUS "conan libraries: " ${CONAN_LIBS})
+
+link_directories("${CMAKE_SOURCE_DIR}/3rd_party/libs")
+
+target_link_libraries(MyGrpcProject PRIVATE ${PROTOBUF_LIB} protobuf::protobuf grpc::grpc ProtoTest grpc_test)
