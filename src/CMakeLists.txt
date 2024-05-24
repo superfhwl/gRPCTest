@@ -4,8 +4,7 @@ find_package(Protobuf REQUIRED)
 message(STATUS "Found Protobuf version: ${Protobuf_VERSION}")
 message(STATUS "Found gRPC version: ${gRPC_VERSION}")
 
-# protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILE})
-# grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_FILE})
+
 add_subdirectory(protos)
 
 message(STATUS "PB out directories:" ${GRPC_HEADER_DIR})
