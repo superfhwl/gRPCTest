@@ -12,11 +12,12 @@ message(STATUS "PB out directories:" ${GRPC_HEADER_DIR})
 
 # 添加执行文件
 
-add_library(grpc_test grpc_test.cpp)
-set_target_properties(grpc_test PROPERTIES
+add_library(cpp_greet_service cpp_greet_service.cpp)
+set_target_properties(cpp_greet_service PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
-target_include_directories(grpc_test PUBLIC ${GRPC_HEADER_DIR} ${Protobuf_INCLUDE_DIRS} ${gRPC_INCLUDE_DIRS} ${absl_INCLUDE_DIRS})
-target_link_libraries(grpc_test)
+add_dependencies(cpp_greet_service proto_message)
+target_include_directories(cpp_greet_service PUBLIC ${GRPC_HEADER_DIR} ${Protobuf_INCLUDE_DIRS} ${gRPC_INCLUDE_DIRS} ${absl_INCLUDE_DIRS})
+target_link_libraries(cpp_greet_service)

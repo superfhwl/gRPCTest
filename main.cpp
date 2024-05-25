@@ -1,5 +1,5 @@
 
-#include "src/grpc_test.h"
+#include "src/cpp_greet_service.h"
 
 int main() {
   RunServer();

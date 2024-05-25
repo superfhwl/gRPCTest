@@ -25,8 +25,7 @@ set_target_properties(MyGrpcProject PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
-target_link_libraries(MyGrpcProject PRIVATE gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts 
-                        protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite
-                        ProtoTest grpc_test)
+target_link_libraries(MyGrpcProject PRIVATE proto_message cpp_greet_service
+    gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
 
     
