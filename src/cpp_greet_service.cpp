@@ -1,30 +1,41 @@
-#include "message.grpc.pb.h"
-#include <grpcpp/grpcpp.h>
+#include "cpp_greet_service.h"
 
-using grpc::Server;
-using grpc::ServerBuilder;
-using grpc::ServerContext;
-using grpc::Status;
-using example::GreetService;
-using example::HelloRequest;
-using example::HelloResponse;
-
-class GreetServiceImpl final : public GreetService::Service {
-  Status SayHello(ServerContext* context, const HelloRequest* request, HelloResponse* response) override {
-    std::string prefix("Hello ");
-    response->set_message(prefix + request->name());
-    return Status::OK;
-  }
+class GreetServiceImpl final : public GreetService::Service
+{
+    Status SayHello(ServerContext *context, const HelloRequest *request, HelloResponse *response) override
+    {
+        std::string prefix("Hello ");
+        std::string mesage_data;
+        ReadData(mesage_data);
+        response->set_message(prefix + request->name() + "! " + mesage_data);
+        return Status::OK;
+    }
 };
 
-void RunServer() {
-  std::string server_address("0.0.0.0:50051");
-  GreetServiceImpl service;
+// 服务器运行函数
+void RunServer(std::string server_address, std::unique_ptr<Server> &server)
+{
+    GreetServiceImpl service;
 
-  ServerBuilder builder;
-  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-  builder.RegisterService(&service);
-  std::unique_ptr<Server> server(builder.BuildAndStart());
-  std::cout << "Server listening on " << server_address << std::endl;
-  server->Wait();
+    ServerBuilder builder;
+    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+    builder.RegisterService(&service);
+    server = builder.BuildAndStart();
+    std::cout << "Server listening on " << server_address << std::endl;
+    server->Wait();
+}
+
+std::string g_data;
+std::mutex g_data_mutex;
+
+void WriteData(const std::string &input_data)
+{
+    std::lock_guard<std::mutex> lock(g_data_mutex);
+    g_data = input_data;
+}
+
+void ReadData(std::string &output_data)
+{
+    std::lock_guard<std::mutex> lock(g_data_mutex);
+    output_data = g_data;
 }
