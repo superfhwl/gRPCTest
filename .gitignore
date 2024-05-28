@@ -7,3 +7,5 @@ grpc-packages/grpc-windows/grpc/
 grpc-packages/protobuf-windows/protobuf/
 grpc-packages/OpenSSL-windows/OpenSSL/
 grpc-packages/upb-windows/upb/
+grpc-packages/zlib-windows/zlib/
+grpc-packages/re2-windows/re2/

@@ -1,0 +1,6 @@
+{
+    "PackageName" : "re2-windows",
+    "URL"         : "https://github.com/google/re2",
+    "License"     : "Custom",
+    "LicenseFile" : "re2/copyright"
+}
