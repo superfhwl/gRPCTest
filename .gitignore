@@ -6,3 +6,4 @@ grpc-packages/gflags-windows/gflags/
 grpc-packages/grpc-windows/grpc/
 grpc-packages/protobuf-windows/protobuf/
 grpc-packages/OpenSSL-windows/OpenSSL/
+grpc-packages/upb-windows/upb/

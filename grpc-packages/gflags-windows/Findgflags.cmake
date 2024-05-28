@@ -62,11 +62,6 @@ endif()
 target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${GFLAGS_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
-# 创建别名
-add_library(gflags::gflags UNKNOWN IMPORTED)       
-set_target_properties(gflags::gflags PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${GFLAGS_LIBRARY_DIR}/gflags_debug.lib
-    IMPORTED_LOCATION_RELEASE ${GFLAGS_LIBRARY_DIR}/gflags.lib>)
 
 # ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${GFLAGS_SHARE_LIBRARIES_RELEASE})
 

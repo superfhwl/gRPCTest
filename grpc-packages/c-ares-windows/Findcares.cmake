@@ -62,11 +62,6 @@ endif()
 target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${CARES_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
-# 创建别名
-add_library(c-ares::c-ares UNKNOWN IMPORTED)       
-set_target_properties(c-ares::c-ares PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${CARES_LIBRARY_DIR}/cares.lib
-    IMPORTED_LOCATION_RELEASE ${CARES_LIBRARY_DIR}/cares.lib>)
 
 # ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${CARES_SHARE_LIBRARIES_RELEASE})
 

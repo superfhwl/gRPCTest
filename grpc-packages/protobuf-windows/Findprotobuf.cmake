@@ -66,15 +66,6 @@ endif()
 target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${PROTOBUF_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
-# 创建别名
-add_library(protobuf::protobuf UNKNOWN IMPORTED)       
-add_library(protobuf::protobuf-lite UNKNOWN IMPORTED)       
-set_target_properties(protobuf::protobuf PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${PROTOBUF_LIBRARY_DIR}/libprotobufd.lib 
-    IMPORTED_LOCATION_RELEASE ${PROTOBUF_LIBRARY_DIR}/libprotobuf.lib>)
-set_target_properties(protobuf::protobuf-lite PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${PROTOBUF_LIBRARY_DIR}/protobuf-lited.lib 
-    IMPORTED_LOCATION_RELEASE ${PROTOBUF_LIBRARY_DIR}/protobuf-lite.lib>)
 
 # ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${PROTOBUF_SHARE_LIBRARIES_RELEASE})
 

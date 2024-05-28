@@ -71,29 +71,6 @@ endif()
 target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${GRPC_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
-# 创建别名
-add_library(grpc::gpr UNKNOWN IMPORTED)       
-add_library(grpc::grpc UNKNOWN IMPORTED)       
-add_library(grpc::grpc++ UNKNOWN IMPORTED)       
-add_library(grpc::grpc++_alts UNKNOWN IMPORTED)       
-add_library(grpc::grpc++_reflection UNKNOWN IMPORTED)      
-set_target_properties(grpc::gpr PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${GRPC_LIBRARY_DIR}/gpr.lib
-    IMPORTED_LOCATION_RELEASE ${GRPC_LIBRARY_DIR}/gpr.lib>)
-set_target_properties(grpc::grpc PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${GRPC_LIBRARY_DIR}/grpc.lib
-    IMPORTED_LOCATION_RELEASE ${GRPC_LIBRARY_DIR}/grpc.lib>)
-set_target_properties(grpc::grpc++ PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${GRPC_LIBRARY_DIR}/grpc++.lib
-    IMPORTED_LOCATION_RELEASE ${GRPC_LIBRARY_DIR}/grpc++.lib>)
-set_target_properties(grpc::grpc++_alts PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${GRPC_LIBRARY_DIR}/grpc++_alts.lib
-    IMPORTED_LOCATION_RELEASE ${GRPC_LIBRARY_DIR}/grpc++_alts.lib>)
-set_target_properties(grpc::grpc++_reflection PROPERTIES 
-    IMPORTED_LOCATION_DEBUG ${GRPC_LIBRARY_DIR}/grpc++_reflection.lib
-    IMPORTED_LOCATION_RELEASE ${GRPC_LIBRARY_DIR}/grpc++_reflection.lib>)        
-
-
 
 # ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${GRPC_SHARE_LIBRARIES_RELEASE})
 

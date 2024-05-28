@@ -1,0 +1,6 @@
+{
+    "PackageName" : "upb-windows",
+    "URL"         : "https://github.com/protocolbuffers/protobuf/tree/main/upb",
+    "License"     : "Custom",
+    "LicenseFile" : "upb/copyright"
+}
