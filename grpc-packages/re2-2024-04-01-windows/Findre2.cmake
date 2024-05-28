@@ -25,11 +25,15 @@ endif()
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(RE2_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/re2/lib/debug)
+        set(RE2_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Debug)                
     else()
         set(RE2_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/re2/lib/release)
+        set(RE2_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Release)     
     endif()
     set(RE2_LIBRARY 
         ${RE2_LIBRARY_DIR}/re2.lib)    
+    set(RE2_SHARE_LIBRARIES
+        ${RE2_LIBRARY_DIR}/re2.dll)             
 endif()
 
 set(RE2_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/re2/include)
@@ -59,8 +63,26 @@ target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${RE2_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
 
-# ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${RE2_SHARE_LIBRARIES_RELEASE})
+if (COMMAND ly_add_target_files)
+    ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${RE2_SHARE_LIBRARIES})
+else()
+    # 定义自定义目标来复制库文件
+    add_custom_target(copy_re2_libraries ALL
+        COMMENT "Copying RE2 shared libraries to ${RE2_DLL_DST_DIR}"
+    )
 
+    # 为每个库文件添加自定义命令
+    foreach(LIB ${RE2_SHARE_LIBRARIES})
+        add_custom_command(TARGET copy_re2_libraries
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${LIB}
+            ${RE2_DLL_DST_DIR}
+            COMMENT "Copying ${LIB} to ${RE2_DLL_DST_DIR}"
+        )
+    endforeach()    
+
+    file(MAKE_DIRECTORY ${RE2_DLL_DST_DIR})
+endif()
 
 # if we're not in O3DE, it's also extremely helpful to show a message to logs that indicate that this
 # library was successfully picked up, as opposed to the system one.

@@ -25,14 +25,16 @@ endif()
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(CARES_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/c-ares/lib/debug)
-        set(CARES_LIBRARY 
-            ${CARES_LIBRARY_DIR}/cares.lib)        
+        set(CARES_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Debug)
     else()
         set(CARES_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/c-ares/lib/release)
-        set(CARES_LIBRARY 
-            ${CARES_LIBRARY_DIR}/cares.lib)           
+        set(CARES_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Release)   
     endif()
 
+    set(CARES_LIBRARY 
+        ${CARES_LIBRARY_DIR}/cares.lib) 
+    set(CARES_SHARE_LIBRARIES
+        ${CARES_LIBRARY_DIR}/cares.dll)
 
 endif()
 
@@ -63,7 +65,26 @@ target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${CARES_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
 
-# ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${CARES_SHARE_LIBRARIES_RELEASE})
+if (COMMAND ly_add_target_files)
+    ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${CARES_SHARE_LIBRARIES})
+else()
+    # 定义自定义目标来复制库文件
+    add_custom_target(copy_cares_libraries ALL
+        COMMENT "Copying CARES shared libraries to ${CARES_DLL_DST_DIR}"
+    )
+
+    # 为每个库文件添加自定义命令
+    foreach(LIB ${CARES_SHARE_LIBRARIES})
+        add_custom_command(TARGET copy_cares_libraries
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${LIB}
+            ${CARES_DLL_DST_DIR}
+            COMMENT "Copying ${LIB} to ${CARES_DLL_DST_DIR}"
+        )
+    endforeach()    
+
+    file(MAKE_DIRECTORY ${CARES_DLL_DST_DIR})    
+endif()
 
 # if we're not in O3DE, it's also extremely helpful to show a message to logs that indicate that this
 # library was successfully picked up, as opposed to the system one.

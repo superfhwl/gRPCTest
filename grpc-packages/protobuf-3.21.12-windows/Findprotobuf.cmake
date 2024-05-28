@@ -27,16 +27,26 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(PROTOBUF_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/protobuf/lib/debug)
+        set(PROTOBUF_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Debug)               
         set(PROTOBUF_LIBRARY 
             ${PROTOBUF_LIBRARY_DIR}/libprotobufd.lib
             ${PROTOBUF_LIBRARY_DIR}/libprotobuf-lited.lib
-            ${PROTOBUF_LIBRARY_DIR}/libprotocd.lib)             
+            ${PROTOBUF_LIBRARY_DIR}/libprotocd.lib)     
+        set(PROTOBUF_SHARE_LIBRARIES
+            ${PROTOBUF_LIBRARY_DIR}/libprotobufd.dll
+            ${PROTOBUF_LIBRARY_DIR}/libprotobuf-lited.dll
+            ${PROTOBUF_LIBRARY_DIR}/libprotocd.dll)                    
     else()
         set(PROTOBUF_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/protobuf/lib/release)
+        set(PROTOBUF_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Release)             
         set(PROTOBUF_LIBRARY 
             ${PROTOBUF_LIBRARY_DIR}/libprotobuf.lib
             ${PROTOBUF_LIBRARY_DIR}/libprotobuf-lite.lib
             ${PROTOBUF_LIBRARY_DIR}/libprotoc.lib)
+        set(PROTOBUF_SHARE_LIBRARIES
+            ${PROTOBUF_LIBRARY_DIR}/libprotobuf.dll
+            ${PROTOBUF_LIBRARY_DIR}/libprotobuf-lite.dll
+            ${PROTOBUF_LIBRARY_DIR}/libprotoc.dll)       
     endif()
 endif()
 
@@ -67,7 +77,26 @@ target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${PROTOBUF_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
 
-# ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${PROTOBUF_SHARE_LIBRARIES_RELEASE})
+if (COMMAND ly_add_target_files)
+    ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${PROTOBUF_SHARE_LIBRARIES})
+else()
+    # 定义自定义目标来复制库文件
+    add_custom_target(copy_protobuf_libraries ALL
+        COMMENT "Copying PROTOBUF shared libraries to ${PROTOBUF_DLL_DST_DIR}"
+    )
+
+    # 为每个库文件添加自定义命令
+    foreach(LIB ${PROTOBUF_SHARE_LIBRARIES})
+        add_custom_command(TARGET copy_protobuf_libraries
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${LIB}
+            ${PROTOBUF_DLL_DST_DIR}
+            COMMENT "Copying ${LIB} to ${PROTOBUF_DLL_DST_DIR}"
+        )
+    endforeach()    
+
+    file(MAKE_DIRECTORY ${PROTOBUF_DLL_DST_DIR})
+endif()
 
 find_package(grpc REQUIRED)
 set(GRPC_LIBRARIES ${GRPC_LIBRARY})

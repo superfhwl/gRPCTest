@@ -60,8 +60,17 @@ set_target_properties(MyGrpcProject PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
     VS_GLOBAL_VcpkgEnabled false
 )
+
 target_link_libraries(MyGrpcProject PRIVATE proto_message cpp_greet_service 
 3rdParty::protobuf 3rdParty::grpc 3rdParty::gflags 3rdParty::c-ares 3rdParty::absl 3rdParty::upb 3rdParty::re2 3rdParty::zlib 3rdParty::openssl)
     # grpc::gpr grpc::grpc grpc::grpc++ grpc::grpc++_alts protobuf::protobuf)
 
-    
+
+if (NOT COMMAND ly_add_target_files)
+    add_dependencies(MyGrpcProject copy_absl_libraries)
+    add_dependencies(MyGrpcProject copy_cares_libraries)
+    add_dependencies(MyGrpcProject copy_openssl_libraries)    
+    add_dependencies(MyGrpcProject copy_protobuf_libraries)    
+    add_dependencies(MyGrpcProject copy_re2_libraries)    
+    add_dependencies(MyGrpcProject copy_zlib_libraries)                
+endif()

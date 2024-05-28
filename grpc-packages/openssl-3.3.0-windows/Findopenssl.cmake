@@ -12,7 +12,7 @@ if (TARGET ${TARGET_WITH_NAMESPACE})
     return()
 endif()
 
-# note that we mimic the behavior or the Findgrpc.cmake that ships with CMake.
+# note that we mimic the behavior or the Findopenssl.cmake that ships with CMake.
 # as such, we declare several variables that other 3rdParty Packages which call
 # find_package(openssl) might be expecting even if O3DE itself does not use them.
 # this allows the openssl package we make to be usable as a drop in replacement
@@ -25,12 +25,19 @@ endif()
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(OPENSSL_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/openssl/lib/debug)
+        set(OPENSSL_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Debug)        
     else()
         set(OPENSSL_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/openssl/lib/release)
+        set(OPENSSL_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Release)      
     endif()
     set(OPENSSL_LIBRARY 
         ${OPENSSL_LIBRARY_DIR}/libssl.lib
         ${OPENSSL_LIBRARY_DIR}/libcrypto.lib)       
+
+    set(OPENSSL_SHARE_LIBRARIES
+        ${OPENSSL_LIBRARY_DIR}/libcrypto-3-x64.dll
+        ${OPENSSL_LIBRARY_DIR}/libssl-3-x64.dll)
+        
 endif()
 
 set(OPENSSL_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/openssl/include)
@@ -60,7 +67,26 @@ target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${OPENSSL_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
 
-# ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${OPENSSL_SHARE_LIBRARIES_RELEASE})
+if (COMMAND ly_add_target_files)
+    ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${OPENSSL_SHARE_LIBRARIES})
+else()
+    # 定义自定义目标来复制库文件
+    add_custom_target(copy_openssl_libraries ALL
+        COMMENT "Copying OPENSSL shared libraries to ${OPENSSL_DLL_DST_DIR}"
+    )
+
+    # 为每个库文件添加自定义命令
+    foreach(LIB ${OPENSSL_SHARE_LIBRARIES})
+        add_custom_command(TARGET copy_openssl_libraries
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${LIB}
+            ${OPENSSL_DLL_DST_DIR}
+            COMMENT "Copying ${LIB} to ${OPENSSL_DLL_DST_DIR}"
+        )
+    endforeach()    
+
+    file(MAKE_DIRECTORY ${OPENSSL_DLL_DST_DIR})    
+endif()
 
 
 # if we're not in O3DE, it's also extremely helpful to show a message to logs that indicate that this

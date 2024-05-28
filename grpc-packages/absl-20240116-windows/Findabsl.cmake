@@ -25,8 +25,10 @@ endif()
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(ABSL_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/absl/lib/debug)
+        set(ABSL_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Debug)
     else()
         set(ABSL_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/absl/lib/release)
+        set(ABSL_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Release)
     endif()
 
     set(ABSL_LIBRARY 
@@ -46,6 +48,9 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
         ${ABSL_LIBRARY_DIR}/absl_log_internal_fnmatch.lib
         ${ABSL_LIBRARY_DIR}/absl_string_view.lib
         ${ABSL_LIBRARY_DIR}/absl_vlog_config_internal.lib)
+
+    set(ABSL_SHARE_LIBRARIES
+        ${ABSL_LIBRARY_DIR}/abseil_dll.dll)
 
 endif()
 
@@ -76,7 +81,26 @@ target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${ABSL_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
 
-# ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${ABSL_SHARE_LIBRARIES_RELEASE})
+if (COMMAND ly_add_target_files)
+    ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${ABSL_SHARE_LIBRARIES})
+else()
+    # 定义自定义目标来复制库文件
+    add_custom_target(copy_absl_libraries ALL
+        COMMENT "Copying ABSL shared libraries to ${ABSL_DLL_DST_DIR}"
+    )
+
+    # 为每个库文件添加自定义命令
+    foreach(LIB ${ABSL_SHARE_LIBRARIES})
+        add_custom_command(TARGET copy_absl_libraries
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${LIB}
+            ${ABSL_DLL_DST_DIR}
+            COMMENT "Copying ${LIB} to ${ABSL_DLL_DST_DIR}"
+        )
+    endforeach()    
+
+    file(MAKE_DIRECTORY ${ABSL_DLL_DST_DIR})
+endif()
 
 # if we're not in O3DE, it's also extremely helpful to show a message to logs that indicate that this
 # library was successfully picked up, as opposed to the system one.

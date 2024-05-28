@@ -25,14 +25,19 @@ endif()
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(ZLIB_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/zlib/lib/debug)
+        set(ZLIB_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Debug)            
         set(ZLIB_LIBRARY 
             ${ZLIB_LIBRARY_DIR}/zlibd.lib)    
+        set(ZLIB_SHARE_LIBRARIES
+            ${ZLIB_LIBRARY_DIR}/zlibd1.dll)                  
     else()
         set(ZLIB_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/zlib/lib/release)
+        set(ZLIB_DLL_DST_DIR ${CMAKE_BINARY_DIR}/bin/Release)        
         set(ZLIB_LIBRARY 
-            ${ZLIB_LIBRARY_DIR}/zlib.lib)            
+            ${ZLIB_LIBRARY_DIR}/zlib.lib)       
+        set(ZLIB_SHARE_LIBRARIES
+            ${ZLIB_LIBRARY_DIR}/zlib1.dll)                     
     endif()
-
 endif()
 
 set(ZLIB_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/zlib/include)
@@ -62,8 +67,26 @@ target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${ZLIB_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
 
-# ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${ZLIB_SHARE_LIBRARIES_RELEASE})
+if (COMMAND ly_add_target_files)
+    ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${ZLIB_SHARE_LIBRARIES})
+else()
+    # 定义自定义目标来复制库文件
+    add_custom_target(copy_zlib_libraries ALL
+        COMMENT "Copying ZLIB shared libraries to ${ZLIB_DLL_DST_DIR}"
+    )
 
+    # 为每个库文件添加自定义命令
+    foreach(LIB ${ZLIB_SHARE_LIBRARIES})
+        add_custom_command(TARGET copy_zlib_libraries
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${LIB}
+            ${ZLIB_DLL_DST_DIR}
+            COMMENT "Copying ${LIB} to ${ZLIB_DLL_DST_DIR}"
+        )
+    endforeach()    
+
+    file(MAKE_DIRECTORY ${ZLIB_DLL_DST_DIR})
+endif()
 
 # if we're not in O3DE, it's also extremely helpful to show a message to logs that indicate that this
 # library was successfully picked up, as opposed to the system one.
