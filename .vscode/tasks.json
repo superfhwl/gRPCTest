@@ -10,6 +10,7 @@
                 "-B", "build",
                 "-S", ".",
                 "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_BUILD_TYPE=Release",
                 // "-DCMAKE_TOOLCHAIN_FILE=D:/Repo/vcpkg/scripts/buildsystems/vcpkg.cmake"
             ],
             "group": {
@@ -49,6 +50,30 @@
             "options": {
                 "cwd": "${workspaceFolder}/build"
             }
-        }
+        },
+        {
+            "label": "Build Release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", ".",
+                "--config", "Release",
+                "--target", "MyGrpcProject",
+                "--verbose"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            }
+        }        
     ]
 }
