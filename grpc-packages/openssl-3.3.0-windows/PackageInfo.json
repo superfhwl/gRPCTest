@@ -1,0 +1,6 @@
+{
+    "PackageName" : "openssl-3.3.0-windows",
+    "URL"         : "https://github.com/openssl/openssl",
+    "License"     : "Apache-2.0",
+    "LicenseFile" : "openssl/copyright"
+}
