@@ -5,17 +5,42 @@ project(MyGrpcProject)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Check if vcpkg is being used and disable it
+if(DEFINED CMAKE_TOOLCHAIN_FILE AND CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg")
+    message(STATUS "Disabling vcpkg toolchain")
+    set(CMAKE_TOOLCHAIN_FILE "" CACHE STRING "Force disable vcpkg toolchain" FORCE)
+endif()
+
+
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/absl-windows/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/c-ares-windows/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/gflags-windows/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/grpc-windows/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/protobuf-windows/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/OpenSSL-windows/")
+
+
+find_package(grpc REQUIRED)
+find_package(protobuf REQUIRED)
+find_package(gflags REQUIRED)
+find_package(absl REQUIRED)
+find_package(cares REQUIRED)
+find_package(OpenSSL REQUIRED)
+if (NOT PROTOBUF_FOUND OR NOT GFLAGS_FOUND OR NOT GRPC_FOUND OR NOT ABSL_FOUND OR NOT CARES_FOUND OR NOT OPENSSL_FOUND)
+    message(FATAL_ERROR "Libs could not be found.")
+else()
+    message(STATUS "Protobuf version: " ${PROTOBUF_VERSION_STRING} " Incl Dir: " ${PROTOBUF_INCLUDE_DIR} " Libs: " ${PROTOBUF_LIBRARY})
+    message(STATUS "gflags version: " ${GFLAGS_VERSION_STRING} " Incl Dir: " ${GFLAGS_INCLUDE_DIR} " Libs: " ${GFLAGS_LIBRARY})    
+    message(STATUS "grpc version: " ${GRPC_VERSION_STRING} " Incl Dir: " ${GRPC_INCLUDE_DIR} " Libs: " ${GRPC_LIBRARY})    
+    message(STATUS "absl version: " ${ABSL_VERSION_STRING} " Incl Dir: " ${ABSL_INCLUDE_DIR} " Libs: " ${ABSL_LIBRARY})    
+    message(STATUS "c-ares version: " ${CARES_VERSION_STRING} " Incl Dir: " ${CARES_INCLUDE_DIR} " Libs: " ${CARES_LIBRARY})    
+    message(STATUS "OpenSSL version: " ${OPENSSL_VERSION} " Incl Dir: " ${OPENSSL_INCLUDE_DIR} " Libs: " ${OPENSSL_LIBRARIES})    
+endif()
+
+
 # 包含子目录
 add_subdirectory(src)
-
-find_package(gRPC REQUIRED)
-find_package(Protobuf REQUIRED)
-
-if (NOT Protobuf_VERSION)
-    message(FATAL_ERROR "Protobuf could not be found.")
-else()
-    message(STATUS "Protobuf version: " ${Protobuf_VERSION} " Incl Dir: " ${Protobuf_INCLUDE_DIRS} " Libs: " ${Protobuf_LIBRARIES})
-endif()
 
 
 # 链接 protobuf 和 gRPC 库
@@ -24,8 +49,10 @@ set_target_properties(MyGrpcProject PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    VS_GLOBAL_VcpkgEnabled false
 )
-target_link_libraries(MyGrpcProject PRIVATE proto_message cpp_greet_service
-    gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
+target_link_libraries(MyGrpcProject PRIVATE proto_message cpp_greet_service 
+3rdParty::protobuf 3rdParty::grpc 3rdParty::gflags 3rdParty::c-ares 3rdParty::absl 3rdParty::OpenSSL)
+    # grpc::gpr grpc::grpc grpc::grpc++ grpc::grpc++_alts protobuf::protobuf)
 
     

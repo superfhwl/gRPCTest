@@ -1,2 +1,8 @@
 build/
 build/*
+grpc-packages/absl-windows/absl/
+grpc-packages/c-ares-windows/c-ares/
+grpc-packages/gflags-windows/gflags/
+grpc-packages/grpc-windows/grpc/
+grpc-packages/protobuf-windows/protobuf/
+grpc-packages/OpenSSL-windows/OpenSSL/

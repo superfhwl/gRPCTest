@@ -1,0 +1,6 @@
+{
+    "PackageName" : "gflags-windows",
+    "URL"         : "https://github.com/gflags/gflags",
+    "License"     : "Custom",
+    "LicenseFile" : "gflags/copyright"
+}
