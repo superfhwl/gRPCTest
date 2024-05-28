@@ -1,7 +1,7 @@
 build/
 build/*
 grpc-packages/absl-20240116-windows/absl/
-grpc-packages/c-ares-1.28.1-windows/c-ares/
+grpc-packages/cares-1.28.1-windows/cares/
 grpc-packages/gflags-2.2.2-windows/gflags/
 grpc-packages/grpc-1.51.1-windows/grpc/
 grpc-packages/protobuf-3.21.12-windows/protobuf/

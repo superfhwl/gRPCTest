@@ -14,7 +14,7 @@ endif()
 
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/absl-20240116-windows/")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/c-ares-1.28.1-windows/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/cares-1.28.1-windows/")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/gflags-2.2.2-windows/")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/grpc-1.51.1-windows/")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/grpc-packages/openssl-3.3.0-windows/")
@@ -40,7 +40,7 @@ else()
     message(STATUS "gflags version: " ${GFLAGS_VERSION_STRING} " Incl Dir: " ${GFLAGS_INCLUDE_DIR} " Libs: " ${GFLAGS_LIBRARY})    
     message(STATUS "grpc version: " ${GRPC_VERSION_STRING} " Incl Dir: " ${GRPC_INCLUDE_DIR} " Libs: " ${GRPC_LIBRARY})    
     message(STATUS "absl version: " ${ABSL_VERSION_STRING} " Incl Dir: " ${ABSL_INCLUDE_DIR} " Libs: " ${ABSL_LIBRARY})    
-    message(STATUS "c-ares version: " ${CARES_VERSION_STRING} " Incl Dir: " ${CARES_INCLUDE_DIR} " Libs: " ${CARES_LIBRARY})    
+    message(STATUS "cares version: " ${CARES_VERSION_STRING} " Incl Dir: " ${CARES_INCLUDE_DIR} " Libs: " ${CARES_LIBRARY})    
     message(STATUS "openssl version: " ${OPENSSL_VERSION} " Incl Dir: " ${OPENSSL_INCLUDE_DIR} " Libs: " ${OPENSSL_LIBRARIES})    
     message(STATUS "upb version: " ${UPB_VERSION_STRING} " Incl Dir: " ${UPB_INCLUDE_DIR} " Libs: " ${UPB_LIBRARY})
     message(STATUS "re2 version: " ${RE2_VERSION_STRING} " Incl Dir: " ${RE2_INCLUDE_DIR} " Libs: " ${RE2_LIBRARY})
@@ -62,7 +62,7 @@ set_target_properties(MyGrpcProject PROPERTIES
 )
 
 target_link_libraries(MyGrpcProject PRIVATE proto_message cpp_greet_service 
-3rdParty::protobuf 3rdParty::grpc 3rdParty::gflags 3rdParty::c-ares 3rdParty::absl 3rdParty::upb 3rdParty::re2 3rdParty::zlib 3rdParty::openssl)
+3rdParty::protobuf 3rdParty::grpc 3rdParty::gflags 3rdParty::cares 3rdParty::absl 3rdParty::upb 3rdParty::re2 3rdParty::zlib 3rdParty::openssl)
     # grpc::gpr grpc::grpc grpc::grpc++ grpc::grpc++_alts protobuf::protobuf)
 
 

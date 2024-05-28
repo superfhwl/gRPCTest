@@ -2,7 +2,7 @@
 	"version": "2.0.0",
 	"tasks": [
         {
-            "label": "Cmake Configure",
+            "label": "Cmake Configure Debug",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -10,7 +10,7 @@
                 "-B", "build",
                 "-S", ".",
                 "-DCMAKE_BUILD_TYPE=Debug",
-                "-DCMAKE_BUILD_TYPE=Release",
+                // "-DCMAKE_BUILD_TYPE=Release",
                 // "-DCMAKE_TOOLCHAIN_FILE=D:/Repo/vcpkg/scripts/buildsystems/vcpkg.cmake"
             ],
             "group": {
@@ -27,6 +27,32 @@
                 "cwd": "${workspaceFolder}"
             }
         },
+        {
+            "label": "Cmake Configure Release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--fresh",
+                "-B", "build",
+                "-S", ".",
+                // "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_BUILD_TYPE=Release",
+                // "-DCMAKE_TOOLCHAIN_FILE=D:/Repo/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },        
         {
             "label": "Build Debug",
             "type": "shell",
