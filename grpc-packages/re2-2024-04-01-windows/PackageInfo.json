@@ -1,5 +1,5 @@
 {
-    "PackageName" : "re2-windows",
+    "PackageName" : "re2-2024-04-01-windows",
     "URL"         : "https://github.com/google/re2",
     "License"     : "Custom",
     "LicenseFile" : "re2/copyright"

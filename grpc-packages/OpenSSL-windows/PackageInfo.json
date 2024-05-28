@@ -1,6 +1,0 @@
-{
-    "PackageName": "OpenSSL-1.1.1o-rev1-windows",
-    "URL": "https://github.com/openssl/openssl",
-    "License": "OpenSSL",
-    "LicenseFile": "OpenSSL/LICENSE"
-}

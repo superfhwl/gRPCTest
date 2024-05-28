@@ -1,5 +1,5 @@
 {
-    "PackageName" : "grpc-windows",
+    "PackageName" : "grpc-1.51.1-windows",
     "URL"         : "https://github.com/grpc/grpc",
     "License"     : "Apache-2.0",
     "LicenseFile" : "grpc/copyright"

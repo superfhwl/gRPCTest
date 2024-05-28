@@ -31,7 +31,7 @@ find_package(cares REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(upb REQUIRED)
 find_package(re2 REQUIRED)
-find_package(ZLIB REQUIRED)
+find_package(zlib REQUIRED)
 if (NOT PROTOBUF_FOUND OR NOT GFLAGS_FOUND OR NOT GRPC_FOUND OR NOT ABSL_FOUND OR NOT CARES_FOUND 
     OR NOT OPENSSL_FOUND OR NOT UPB_FOUND OR NOT RE2_FOUND OR NOT ZLIB_FOUND)
     message(FATAL_ERROR "Libs could not be found.")
@@ -61,7 +61,7 @@ set_target_properties(MyGrpcProject PROPERTIES
     VS_GLOBAL_VcpkgEnabled false
 )
 target_link_libraries(MyGrpcProject PRIVATE proto_message cpp_greet_service 
-3rdParty::protobuf 3rdParty::grpc 3rdParty::gflags 3rdParty::c-ares 3rdParty::absl 3rdParty::OpenSSL 3rdParty::upb 3rdParty::re2 3rdParty::ZLIB)
+3rdParty::protobuf 3rdParty::grpc 3rdParty::gflags 3rdParty::c-ares 3rdParty::absl 3rdParty::OpenSSL 3rdParty::upb 3rdParty::re2 3rdParty::zlib)
     # grpc::gpr grpc::grpc grpc::grpc++ grpc::grpc++_alts protobuf::protobuf)
 
     

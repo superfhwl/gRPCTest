@@ -1,5 +1,5 @@
 {
-    "PackageName" : "abseil-windows",
+    "PackageName" : "abseil-20240116-windows",
     "URL"         : "https://github.com/abseil/abseil-cpp",
     "License"     : "Apache-2.0",
     "LicenseFile" : "abseil/copyright"

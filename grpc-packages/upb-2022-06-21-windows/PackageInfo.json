@@ -1,5 +1,5 @@
 {
-    "PackageName" : "upb-windows",
+    "PackageName" : "upb-2022-06-21-windows",
     "URL"         : "https://github.com/protocolbuffers/protobuf/tree/main/upb",
     "License"     : "Custom",
     "LicenseFile" : "upb/copyright"

@@ -1,5 +1,5 @@
 {
-    "PackageName" : "protobuf-windows",
+    "PackageName" : "protobuf-3.21.12-windows",
     "URL"         : "https://github.com/protocolbuffers/protobuf",
     "License"     : "Custom",
     "LicenseFile" : "protobuf/copyright"

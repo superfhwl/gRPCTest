@@ -41,7 +41,8 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
         ${GRPC_LIBRARY_DIR}/grpc++_error_details.lib
         ${GRPC_LIBRARY_DIR}/grpc++_reflection.lib
         ${GRPC_LIBRARY_DIR}/grpc++_unsecure.lib
-        ${GRPC_LIBRARY_DIR}/grpcpp_channelz.lib) 
+        ${GRPC_LIBRARY_DIR}/grpcpp_channelz.lib
+        ${GRPC_LIBRARY_DIR}/address_sorting.lib) 
 
 endif()
 

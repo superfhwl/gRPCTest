@@ -26,7 +26,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(ZLIB_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/zlib/lib/debug)
         set(ZLIB_LIBRARY 
-            ${ZLIB_LIBRARY_DIR}/zlib.lib)                    
+            ${ZLIB_LIBRARY_DIR}/zlibd.lib)    
     else()
         set(ZLIB_LIBRARY_DIR ${CMAKE_CURRENT_LIST_DIR}/zlib/lib/release)
         set(ZLIB_LIBRARY 

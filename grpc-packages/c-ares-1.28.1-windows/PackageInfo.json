@@ -1,5 +1,5 @@
 {
-    "PackageName" : "c-ares-windows",
+    "PackageName" : "c-ares-1.28.1-windows",
     "URL"         : "https://github.com/c-ares/c-ares",
     "License"     : "MIT",
     "LicenseFile" : "c-ares/copyright"
