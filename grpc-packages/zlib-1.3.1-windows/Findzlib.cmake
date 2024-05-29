@@ -54,6 +54,7 @@ set(ZLIB_FOUND True)
 
 # declare the targets - O3DE has the 3rdParty namespace target, CMake has zlib::zlib
 add_library(${TARGET_WITH_NAMESPACE} INTERFACE IMPORTED GLOBAL)
+add_library(ZLIB::ZLIB ALIAS ${TARGET_WITH_NAMESPACE})
 
 # cmake < 3.21 and visual studio < 16.10 don't properly implement SYSTEM includes
 # so we use O3DEs patched implementation if it is available and fallback to default if not.
@@ -66,6 +67,7 @@ endif()
 target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${ZLIB_LIBRARY})
 
 # set the library file as the imported location so that things know to link to it:
+set_target_properties(${TARGET_WITH_NAMESPACE} PROPERTIES IMPORTED_LOCATION "${ZLIB_LIBRARY}")
 
 if (COMMAND ly_add_target_files)
     ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${ZLIB_SHARE_LIBRARIES})
